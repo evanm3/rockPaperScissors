@@ -9,51 +9,59 @@ let cpuScore = 0;
 // function loops to 10 to likely reach a best 3 out of 5 endpoint 
 function game(){
     for (let i = 1; i <= 10; i++) {
-        singleRoundResults();
-            if (playerScore === 3) {
+        // playRoundResults();
+            if (playerScore === 5) {
                 alert(`You won! CPU: ${cpuScore} to PLAYER: ${playerScore}`);
-                break;
-            }else if (cpuScore === 3) {
+                playerScore = 0;
+                cpuScore = 0;
+            }else if (cpuScore === 5) {
                 alert(`You lost. CPU: ${cpuScore} to PLAYER: ${playerScore}`);
-                break;
+                playerScore = 0;
+                cpuScore = 0;
             }
     }
 }
 
-function singleRoundResults(){
+function playRoundResults(){
     const computerSelection = getComputerChoice();
     const playerSelection = getPlayerChoice();
     console.log(`PLAYER CHOICE: ${playerSelection} CPU CHOICE: ${computerSelection}`)
-    console.log(singleRound(playerSelection, computerSelection));
-    console.log(`player: ${playerScore}, cpu: ${cpuScore}`);
+    console.log(playRound(playerSelection, computerSelection));
 
 }
 
-function singleRound(playerSelection, computerSelection) { 
-    
+function playRound(playerSelection, computerSelection) { 
+
     if (playerSelection === computerSelection) {
-        console.log("It's a draw!"); 
+        document.getElementById('results').innerHTML = "It's a draw!"; 
+        document.getElementById("cpu-choice").innerHTML = `${playerSelection.charAt(0).toUpperCase() + playerSelection.substring(1)}`;
         return;
     } else if(playerSelection === "rock" && computerSelection === "scissors"){
-        console.log("Rock smashes Scissors. You win!");
+        document.getElementById('results').innerHTML = "Rock smashes Scissors. You win!";
+        document.getElementById("cpu-choice").innerHTML = "Scissors";
         return playerScore++; 
     } else if(playerSelection === "rock" && computerSelection === "paper") {
-        console.log("Rock is covered by Paper. You lose!");
+        document.getElementById('results').innerHTML = "Rock is covered by Paper. You lose!";
+        document.getElementById("cpu-choice").innerHTML = "Paper";
         return cpuScore++; 
     } else if(playerSelection === "paper" && computerSelection === "rock") {
-        console.log("Paper covers Rock. You win!");
+        document.getElementById('results').innerHTML = "Paper covers Rock. You win!";
+        document.getElementById("cpu-choice").innerHTML = "Rock";
         return playerScore++; 
     } else if(playerSelection === "paper" && computerSelection === "scissors") {
-        console.log("Paper is cut by Scissors! You lose!");
+        document.getElementById('results').innerHTML = "Paper is cut by Scissors! You lose!";
+        document.getElementById("cpu-choice").innerHTML = "Scissors";
         return cpuScore++; 
     } else if(playerSelection === "scissors" && computerSelection === "paper") {
-        console.log("Scissors cut Paper! You win!");
+        document.getElementById('results').innerHTML = "Scissors cut Paper! You win!";
+        document.getElementById("cpu-choice").innerHTML = "Paper";
         return playerScore++; 
     } else if(playerSelection === "scissors" && computerSelection === "rock") {
-        console.log("Scissors smashed by Rock. You lose!");
+        document.getElementById('results').innerHTML = "Scissors smashed by Rock. You lose!";
+        document.getElementById("cpu-choice").innerHTML = "Rock";
         return cpuScore++; 
     } else {
-        console.log("invalid response");
+        document.getElementById('results').innerHTML = "invalid response";
         return false;
     }
 }
@@ -63,12 +71,32 @@ function getComputerChoice() {
     return (OPTIONS[computerChoice]);
 }
 
-function getPlayerChoice() {
-    let playerSelectionPrompt = prompt("Rock, Paper, or Scissors?", "Rock/Paper/Scissors");
-    while (playerSelectionPrompt == null) {
-        playerSelectionPrompt = prompt("Rock, Paper, or Scissors?", "Rock/Paper/Scissors");
-    }
-    return (playerSelectionPrompt.toLowerCase())
-}
+const rockButton = document.querySelector('.rock');
+const scissorsButton = document.querySelector('.scissors');
+const paperButton = document.querySelector('.paper');
 
-console.log(game());
+rockButton.addEventListener('click', () => {
+    playRound("rock", getComputerChoice());
+    scoreBoardUpdate();
+    game();
+});
+
+paperButton.addEventListener('click', () => {
+    playRound("paper", getComputerChoice());
+    scoreBoardUpdate();
+    game();
+});
+
+scissorsButton.addEventListener('click', () => {
+    playRound('scissors', getComputerChoice());
+    scoreBoardUpdate();
+    game();
+});
+ 
+
+const scoreBoard = document.querySelector('.scoreboard');
+document.getElementById("scoreboard").innerHTML = `PLAYER: ${playerScore} CPU: ${cpuScore}`;
+
+const scoreBoardUpdate = function() {
+    document.getElementById("scoreboard").innerHTML = `PLAYER: ${playerScore} CPU: ${cpuScore}`;
+}
